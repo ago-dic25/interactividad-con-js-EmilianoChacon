@@ -1,72 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Spot</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="estilos.css">
-    <!--<script src="https://kit.fontawesome.com/6d11003e79.js" crossorigin="anonymous"></script>-->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BlogSpot · Best of the week</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#1b1b1b;
+      --card:#ffffff;
+      --muted:#f3f5f7;
+      --muted-2:#e9eef2;
+      --text:#0f1115;
+      --soft:#8a8f98;
+      --primary:#111213;
+      --chip:#eef2f6;
+      --radius:22px;
+      --radius-lg:28px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      line-height:1.4;
+      transition: all .3s;
+    }
+    .page{
+      max-width:1140px; margin:40px auto; padding:22px; background:#fff; border-radius:28px;
+      box-shadow:0 10px 40px rgba(0,0,0,.25);
+    }
+    header{
+      display:flex; align-items:center; gap:12px; justify-content:space-between; padding:8px 6px 18px 6px;
+    }
+    .brand{font-weight:900; font-size:22px; letter-spacing:.2px}
+    nav{display:flex; gap:22px; align-items:center; color:#4b4f56; font-size:14px}
+    nav a{color:inherit; text-decoration:none; position:relative}
+    nav a sup{font-size:10px; color:#9aa0a6; margin-left:4px}
+    .spacer{flex:1}
+    .icon-btn, .menu-btn, #toggleMode{
+      border:1px solid #e5e7eb; background:white; cursor:pointer; border-radius:999px;
+    }
+    .icon-btn{height:40px; width:40px; display:grid; place-items:center}
+    .menu-btn{padding:8px 14px; display:flex; align-items:center; gap:8px;}
+    .menu-btn span{font-size:14px}
+    #toggleMode{padding:8px 12px}
+    #searchWrap{display:flex; align-items:center; gap:6px;}
+    #searchInput{
+      padding:6px 10px; border:1px solid #e5e7eb; border-radius:999px;
+    }
+    #clearSearch{
+      display:none; /* oculto al inicio */
+      background:#fff; border:1px solid #e5e7eb; border-radius:999px; cursor:pointer; padding:6px 10px;
+    }
+
+    h1.title{
+      font-size:clamp(36px, 6vw, 78px);
+      line-height:.95; font-weight:800; margin:14px 6px 26px 6px;
+      letter-spacing:-.02em;
+    }
+
+    .grid{margin-top:18px; display:grid; grid-template-columns:2fr 1fr; gap:22px;}
+    .card{background:var(--muted); border-radius:var(--radius-lg); overflow:hidden; position:relative}
+    .card-inner{padding:18px}
+    .big-card{position:relative;}
+    .big-card .img-wrap{height:480px; overflow:hidden; border-radius:var(--radius-lg);}
+    .big-card img{width:100%; height:100%; object-fit:cover; display:block}
+
+    .date-chip{position:absolute; top:16px; left:16px; background:white; padding:8px 12px; border-radius:999px; font-size:12px;
+      border:1px solid #e5e7eb; color:#374151; box-shadow:0 3px 10px rgba(0,0,0,.08);}
+    .tag{display:inline-flex; align-items:center; gap:6px; font-size:12px; background:var(--chip); padding:6px 10px; border-radius:999px; color:#4b5563; border:1px solid #e5e7eb}
+
+    .bubble{position:absolute; left:40px; top:28px; max-width:min(560px, 80%);
+      background:white; padding:16px 18px; border-radius:16px; box-shadow:0 15px 35px rgba(0,0,0,.18);
+      border:1px solid #eef0f3;}
+    .bubble:before{content:""; position:absolute; left:24px; bottom:-12px; width:22px; height:22px; background:white; border-left:1px solid #eef0f3; border-bottom:1px solid #eef0f3; transform:rotate(45deg);}
+    .bubble .tag{margin-bottom:10px}
+    .bubble h2{margin:4px 0 0 0; font-size:clamp(22px,3.2vw,36px); line-height:1.05}
+    .bubble .cta{position:absolute; right:12px; bottom:12px; height:34px; width:34px; border-radius:999px; border:1px solid #e5e7eb; display:grid; place-items:center; background:white;}
+
+    .stack{display:grid; gap:22px}
+    .ad-card{background:#d1e3ea; border-radius:var(--radius-lg); padding:22px; position:relative}
+    .ad-card .chip{position:absolute; left:16px; top:16px}
+    .ad-card h3{margin:36px 0 8px 0; font-size:18px}
+    .ad-card p{margin:0; color:#0f1115; font-weight:600; font-size:22px; line-height:1.15}
+    .ad-card .more{position:absolute; right:18px; bottom:16px; font-size:12px; color:#0f1115; text-decoration:none}
+
+    .pick-card{background:#eef2f6; border-radius:var(--radius-lg); overflow:hidden; position:relative}
+    .pick-card img{width:100%; height:100%; max-height:320px; object-fit:cover; display:block}
+    .pick-card .badge{position:absolute; right:16px; top:16px; background:white; border:1px solid #e5e7eb; width:42px; height:42px; border-radius:999px; display:grid; place-items:center; font-size:12px; color:#6b7280}
+    .pick-card .bubble-btn{position:absolute; left:22px; bottom:18px; background:white; border:1px solid #e5e7eb; border-radius:999px; padding:14px 18px; font-weight:600; text-decoration:none; color:#0f1115; box-shadow:0 8px 24px rgba(0,0,0,.15)}
+
+    .row{display:flex; align-items:center; gap:10px}
+    .muted{color:#6b7280}
+
+    /* Dark mode */
+    .dark{background:black; color:white;}
+    .dark .page{background:#111; color:white;}
+
+    .ocultar{display:none;}
+
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
+  <div class="page">
     <header>
-        <img src="logo.png" alt="">
-        <nav>
-            
-            <button id="menu">Menu</button>
-            <ul>
-                <li>
-                    <a href="#">Articles</a>
-                </li>
-                <li>
-                    <a href="#">Radio</a>
-                </li>
-                <li>
-                    <a href="#">Podcast</a>
-                </li>
-                 <li>
-                    <a href="#">Crear Cuenta / Registro</a>
-                </li>
-            </ul>
-            <button id="buscar">
-                Buscar
-            </button>
-        </nav>
+      <div class="brand">BlogSpot.</div>
+      <nav>
+        <a href="#">Articulos</a>
+        <a href="#">Radio</a>
+        <a href="#">Podcast</a>
+        <a href="#">Se un escritor</a>
+        <a href="#">Habla con nosotros</a>
+      </nav>
+      <div class="spacer"></div>
+      
+      <!-- Buscador fijo -->
+      <div id="searchWrap">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+        <button id="clearSearch">❌</button>
+      </div>
+
+      <!-- Botón Dark/Light -->
+      <button id="toggleMode">🌙/☀</button>
+      <button class="menu-btn" aria-label="Abrir menú"><span>Menu</span></button>
     </header>
-    
-    <main>
-        <section>
-            <div class="tarjeta" id="bestOfTheWeek">
-                <h1>Best of the week</h1>
-                <a href="#">See all posts</a>
-            </div>
-            <div class="tarjeta" id="travel">
-                <span>Sep 06, 2022</span>
-                <button>Travel</button>
-                <img src="imagenes/arnel-hasanovic-MNd-Rka1o0Q-unsplash.jpg" width="50%" alt="">
-                <div class="info">
-                    <span>Travel</span>
-                    <h2>TravelPro</h2>
-                </div>
-            </div>
-        </section>
-        <aside>
-            <div class="tarjeta" id="ads">
-                <span>ADS</span>
-                <button>+</button>
-                <span>Become a podcaster</span>
-                <h3>Real talk</h3>
-            </div>
-            <div  class="tarjeta" id="seeAll">
-                <img src="imagenes/soundtrap-n30_i7mx62o-unsplash.jpg" alt="" width="50%">
-                <button>See all pics</button>
-            </div>
+
+    <h1 class="title">Lo mejor de la semana</h1>
+    <div class="subtitle" style="margin:0 6px 6px 6px"><a href="#">Mira todo →</a></div>
+
+    <section class="grid">
+      <!-- Tarjeta 1 -->
+      <article class="big-card card tarjeta">
+        <div class="img-wrap">
+          <img src="sombreros.jpeg" alt="Pareja con sombreros" />
+        </div>
+        <div class="date-chip">Aug 16, 2025</div>
+        <div class="bubble">
+          <span class="tag">Viaje</span>
+          <h2>Viaja a la playa con descuentos</h2>
+        </div>
+      </article>
+
+      <div class="stack">
+        <aside class="ad-card" id="ads">
+          <div class="chip tag">• ADS</div>
+          <h3>Become a BROADCAST member</h3>
+          <p>Real talk in a corporate world</p>
+          <a class="more" href="#">Aprende más</a>
+          <button id="likeBtn" style="position:absolute; right:16px; top:16px; width:34px; height:34px; border-radius:999px; border:1px solid #e5e7eb; background:#fff">👍🏼</button>
+          <span id="likeCounter" style="position:absolute; right:16px; top:60px;">0</span>
         </aside>
-    </main>
+
+        <!-- Tarjeta 2 -->
+        <article class="pick-card tarjeta" id="seeAll">
+          <img src="modelo.jpeg" alt="Modelo" id="galeriaImg"/>
+          <div class="badge">24</div>
+          <a class="bubble-btn" href="#">Mira más →</a>
+        </article>
+      </div>
+    </section>
+
+    <section style="margin:26px 6px 6px 6px; display:flex; gap:10px; flex-wrap:wrap">
+      <span class="tag">Viajes</span>
+      <span class="tag">Diseño</span>
+      <span class="tag">Cultura</span>
+      <span class="tag">Negocios</span>
+      <span class="tag">Podcast</span>
+      <span class="tag">Fotografia</span>
+    </section>
+  </div>
+
+  <!-- Script -->
+  <script src="index.js"></script>
 </body>
-<script src="index.js"></script>
 </html>
